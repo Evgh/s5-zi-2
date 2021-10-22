@@ -11,28 +11,35 @@ namespace s5_zi_2
                             @"textfiles/english.txt",
                             "KasperovichEugeniyaNikolaevna"
                             );
-            Console.WriteLine("___");
 
             AlphabetRoutine("абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
                             @"textfiles\russian.txt",
                             "КасперовичЕвгенияНиколаевна"
                             );
+
+            AlphabetRoutine("01", @"textfiles/binary.txt", "11001010 11000101");
+
             Console.ReadLine();
         }
 
-        private static void AlphabetRoutine(string alphabetStr, string source, string strInputEng)
+        private static void AlphabetRoutine(string alphabetStr, string source, string strInput)
         {
             Alphabet alphabet = new Alphabet(alphabetStr);
             string text = ReadFile(source);
 
             alphabet.CountEntropy(text.ToLower());
-            alphabet.PrintAllData();
-            alphabet.PrintASCII(strInputEng.ToLower());
-            alphabet.PtintAlphabetInfo(strInputEng.ToLower());
 
-            Console.WriteLine("Количество информации с вероятностью ошибочной передачи 0.1:" + alphabet.GetEffectiveEntropy(0.1) * strInputEng.Length);
-            Console.WriteLine("Количество информации с вероятностью ошибочной передачи 0.5:" + alphabet.GetEffectiveEntropy(0.5) * strInputEng.Length);
-            Console.WriteLine("Количество информации с вероятностью ошибочной передачи 1:" + Math.Round(alphabet.GetEffectiveEntropy(0.999999) * strInputEng.Length));
+            alphabet.PrintAllData();
+            alphabet.PrintASCIIInfoAmount(strInput.ToLower());
+            alphabet.PtintInfoAmount(strInput.ToLower());
+
+            alphabet.PrintInfoAmount(strInput.ToLower(), 0.1);
+            alphabet.PrintInfoAmount(strInput.ToLower(), 0.5);
+            alphabet.PrintInfoAmount(strInput.ToLower(), 0.9999);
+            //alphabet.PrintInfoAmount(strInput.ToLower(), 1.0);
+
+            Console.WriteLine("___");
+            Console.WriteLine();
         }
 
         static private string ReadFile(string path)

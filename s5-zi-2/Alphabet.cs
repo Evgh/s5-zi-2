@@ -31,9 +31,10 @@ namespace s5_zi_2
 
             char[] arrText = text.ToCharArray();
             int textLength = 0;
+            int buff;
 
-            for (int y = 0; y < arrText.Length; y++) 
-                if (Char.IsLetter(arrText[y])) 
+            for (int y = 0; y < arrText.Length; y++)
+                if (Char.IsLetter(arrText[y]) || int.TryParse($"{arrText[y]}", out buff))  
                     textLength++;
 
             for (int i = 0; i < _alphabet.Length; i++)
@@ -41,14 +42,15 @@ namespace s5_zi_2
                 SuperSymbol temp = new SuperSymbol { Symbol = _alphabet[i] };
 
                 for (int y = 0; y < arrText.Length; y++)
-                    if (Char.IsLetter(arrText[y]) && temp.Symbol == arrText[y])
+                    if ((Char.IsLetter(arrText[y]) || int.TryParse($"{arrText[y]}", out buff)) && temp.Symbol == arrText[y])
                         temp.NumOfOccurrences++;
 
 
                 temp.Chance = (double)temp.NumOfOccurrences / (double)textLength;
                 _allSymStat.Add(temp);
 
-                if (temp.Chance != 0) Entropy += -temp.Chance * Math.Log(temp.Chance, 2);
+                if (temp.Chance != 0) 
+                    Entropy += -temp.Chance * Math.Log(temp.Chance, 2);
             }
 
             CountBynaryEntropy(text);
@@ -57,39 +59,56 @@ namespace s5_zi_2
         private void CountBynaryEntropy(string text)
         {
             byte[] buf = Encoding.UTF8.GetBytes(text);
-            int byteZero = 0;
-            int byteOne = 0;
+            double byteZero = 0;
+            double byteOne = 0;
+            double lenth = 0;
 
             for (int i = 0; i < buf.Length; i++)
             {
-                if (buf[i] == 0) byteZero++;
-                if (buf[i] == 1) byteOne++;
+                int b = buf[i];
+                while (b > 0)
+                {
+                    if ((b & 1) == 0)
+                        byteZero++;
+                    if ((b & 1) == 1)
+                        byteOne++;
+
+                    b = b >> 1;
+                    lenth++;
+                }
             }
 
-            BynaryEntropy = -(byteOne / buf.Length * Math.Log(byteOne / buf.Length, 2) + byteZero / buf.Length * Math.Log(byteZero / buf.Length));
+            BynaryEntropy = -(byteOne / lenth * Math.Log(byteOne / lenth, 2) + byteZero / lenth * Math.Log(byteZero / lenth));
         }
-
-        public double GetEffectiveEntropy(double errorChance)
+        private double GetEffectiveEntropy(double errorChance)
         {
             return (1 - (-errorChance * Math.Log(errorChance, 2) - (1 - errorChance) * Math.Log(1 - errorChance, 2)));
         }
 
-        public void PrintASCII(string str) 
-        { 
-            Console.WriteLine($"ASCII: {str.Length * 8} "); 
-        }
-
-        public void PtintAlphabetInfo(string str) 
-        { 
-            Console.WriteLine($"Info amount: {str.Length * 8}"); 
-        }
         public void PrintAllData()
         {
             Console.WriteLine($"Alphabet: [{new string(_alphabet)}] - [{N}]");
             Console.WriteLine("Entropy - " + Entropy);
+            Console.WriteLine("Binary entropy :" + BynaryEntropy);
 
             for (int i = 0; i < _allSymStat.Count; i++)
                 Console.WriteLine(_allSymStat[i].Symbol + " - " + Math.Round(_allSymStat[i].Chance, 5) + " - " + _allSymStat[i].NumOfOccurrences);
+        }
+
+        public void PrintASCIIInfoAmount(string str)
+        {
+            Console.WriteLine($"ASCII: {str.Length * BynaryEntropy * 8} ");
+        }
+
+        public void PtintInfoAmount(string str)
+        {
+            Console.WriteLine($"Info amount: {str.Length * Entropy}");
+        }
+
+        public void PrintInfoAmount(string str, double errorChance)
+        {
+            double effectiveEntropy = GetEffectiveEntropy(errorChance);
+            Console.WriteLine($"Error chance: {errorChance},  Info amount: {str.Length * effectiveEntropy}");
         }
     }
 }
