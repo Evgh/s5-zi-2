@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace s5_zi_3
 {
-    public static class Encoder
+    public static class Base64Encoder
     {
         static string base64alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
         static char fillSymbol = '=';
@@ -14,7 +14,7 @@ namespace s5_zi_3
         public static char[] Encode(string info)
         {
             var bytes = Encoding.ASCII.GetBytes(info);
-            var bits = GetBitsFromBytes(bytes);
+            var bits = s5_zi_2.Encoder.GetBitsFromBytes(bytes);
 
             var baseIndexes = GetBase64Indexes(bits);
 
@@ -26,47 +26,13 @@ namespace s5_zi_3
                 message[i] = i < baseIndexes.Length ? base64alphabet[baseIndexes[i]] : fillSymbol;
             }
 
-            Console.WriteLine(messageLenth);
-            Console.WriteLine(message);
+            #region Debug output
+            //Console.WriteLine(messageLenth);
+            //Console.WriteLine(message);
+            #endregion
 
             return message;
         }
-
-        public static bool[] GetBitsFromBytes(byte[] bytes)
-        {
-            var bits = new bool[bytes.Length * 8];
-
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                int buff = bytes[i];
-                for (int j = 0; j < 8; j++)
-                {
-                    bits[8 * i + 7 - j] = (buff & 1) == 1;
-                    buff = buff >> 1;
-                }
-            }
-            #region Debug output
-#if DEBUG
-            for (int i = 0; i < bits.Length; i++)
-            {
-                Console.Write(bits[i] ? 1 : 0);
-                if ((i + 1) % 8 == 0)
-                    Console.Write(" ");
-            }
-            Console.WriteLine();
-
-            for (int i = 0; i < bits.Length; i++)
-            {
-                Console.Write(bits[i] ? 1 : 0);
-                if ((i + 1) % 6 == 0)
-                    Console.Write(" ");
-            }
-            Console.WriteLine();
-#endif
-            #endregion
-            return bits;
-        }
-
 
         static int[] GetBase64Indexes(bool[] bits)
         {
@@ -86,12 +52,10 @@ namespace s5_zi_3
                 indexes[i] = index;
             }
             #region Debug output
-#if DEBUG
-            Console.WriteLine(indAmount);
-            foreach (var i in indexes)
-                Console.Write(i + " ");
-            Console.WriteLine();
-#endif
+            //Console.WriteLine(indAmount);
+            //foreach (var i in indexes)
+            //    Console.Write(i + " ");
+            //Console.WriteLine();
             #endregion
             return indexes;
         }

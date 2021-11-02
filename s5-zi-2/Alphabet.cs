@@ -11,7 +11,6 @@ namespace s5_zi_2
         private char[] _alphabet;
         private List<SuperSymbol> _allSymStat;
         public readonly int N;
- 
         
         public double Entropy { get; set; }
         public double BynaryEntropy { get; set; }
@@ -61,21 +60,17 @@ namespace s5_zi_2
             byte[] buf = Encoding.UTF8.GetBytes(text);
             double byteZero = 0;
             double byteOne = 0;
-            double lenth = 0;
+            double lenth;
 
-            for (int i = 0; i < buf.Length; i++)
+            var bits = s5_zi_2.Encoder.GetBitsFromBytes(buf);
+            lenth = bits.Length;
+
+            foreach (var bit in bits)
             {
-                int b = buf[i];
-                while (b > 0)
-                {
-                    if ((b & 1) == 0)
-                        byteZero++;
-                    if ((b & 1) == 1)
-                        byteOne++;
-
-                    b = b >> 1;
-                    lenth++;
-                }
+                if (bit)
+                    byteOne++;
+                else
+                    byteZero++;
             }
 
             BynaryEntropy = -(byteOne / lenth * Math.Log(byteOne / lenth, 2) + byteZero / lenth * Math.Log(byteZero / lenth));

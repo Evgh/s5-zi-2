@@ -5,7 +5,10 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "s5-zi-2", "s5-zi-2\s5-zi-2.csproj", "{FE681B1F-DF81-4FD4-8EDB-06965F47FE5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "s5-zi-3", "s5-zi-3\s5-zi-3.csproj", "{4B26CCE1-3823-46FF-BCAA-DFD4DEE64CF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "s5-zi-3", "s5-zi-3\s5-zi-3.csproj", "{4B26CCE1-3823-46FF-BCAA-DFD4DEE64CF6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FE681B1F-DF81-4FD4-8EDB-06965F47FE5C} = {FE681B1F-DF81-4FD4-8EDB-06965F47FE5C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

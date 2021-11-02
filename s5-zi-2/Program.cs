@@ -25,7 +25,7 @@ namespace s5_zi_2
         private static void AlphabetRoutine(string alphabetStr, string source, string strInput)
         {
             Alphabet alphabet = new Alphabet(alphabetStr);
-            string text = ReadFile(source);
+            string text = FileSlave.ReadFileToEnd(source);
 
             alphabet.CountEntropy(text.ToLower());
 
@@ -40,14 +40,6 @@ namespace s5_zi_2
 
             Console.WriteLine("___");
             Console.WriteLine();
-        }
-
-        static private string ReadFile(string path)
-        {
-            using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
-            {
-                return sr.ReadToEnd();
-            }
         }
     }
 }
