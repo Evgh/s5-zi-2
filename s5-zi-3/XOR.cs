@@ -10,7 +10,54 @@ namespace s5_zi_3
     {
         public static string ExecuteXorAscii(string first, string second)
         {
-            while(first.Length < second.Length)
+            var fixLength = FixLength(first, second);
+            first = fixLength.Item1;
+            second = fixLength.Item2;
+
+            var firstAscii = ASCIIEncoding.ASCII.GetBytes(first); 
+            var secondAscii = ASCIIEncoding.ASCII.GetBytes(second);
+
+            var xor = ExecuteXor(firstAscii, secondAscii);
+
+            return ASCIIEncoding.ASCII.GetString(xor);
+        }
+
+        public static string ExecuteXorBase64(string first, string second)
+        {
+            var fixLength = FixLength(first, second);
+            first = fixLength.Item1;
+            second = fixLength.Item2;
+
+            var firstBase64 = Base64Encoder.GetBase64Bytes(first);
+            var secondBase64 = Base64Encoder.GetBase64Bytes(second);
+
+            var xor = ExecuteXor(firstBase64, secondBase64);
+
+            return Base64Encoder.GetString(xor);
+        }
+
+        public static byte[] ExecuteXor(byte[] firstBytes, byte[] secondBytes)
+        {
+            var xor = new byte[firstBytes.Length];
+            for (int i = 0; i < firstBytes.Length; i++)
+                xor[i] = (byte)(firstBytes[i] ^ secondBytes[i]);
+
+            #region Debug output 
+            //foreach (var b in xor)
+            //    Console.Write(b ? 1 : 0);
+            //Console.WriteLine();
+            #endregion
+            return xor;
+        }
+
+        private static Tuple<string, string> FixLength(string first, string second)
+        {
+            if (string.IsNullOrEmpty(first))
+                first = "";
+            if(string.IsNullOrEmpty(second))
+                second = "";
+
+            while (first.Length < second.Length)
             {
                 first += '0';
             }
@@ -20,40 +67,7 @@ namespace s5_zi_3
                 second += '0';
             }
 
-            var firstAscii = ASCIIEncoding.ASCII.GetBytes(first);
-            var secondAscii = ASCIIEncoding.ASCII.GetBytes(second);
-
-            var fBits = s5_zi_2.Encoder.GetBitsFromBytes(firstAscii);
-            var sBits = s5_zi_2.Encoder.GetBitsFromBytes(secondAscii);
-
-            var xor = new bool[fBits.Length];
-            for(int i = 0; i < fBits.Length; i++)
-            {
-                xor[i] = fBits[i] ^ sBits[i]; 
-            }
-
-            var xorBytes = new byte[firstAscii.Length];
-            for(int i = 0; i < xorBytes.Length; i++)
-            {
-                byte buff = 0;
-                for(int j = 0; j < 7; j++)
-                {
-                    buff += (byte) (xor[i * 8 + 7 - j] ? (1 << j) : 0);
-                }
-                xorBytes[i] = buff;
-            }
-
-            #region Debug output 
-            //foreach (var b in xor)
-            //    Console.Write(b ? 1 : 0);
-            //Console.WriteLine();
-
-            //foreach (var b in xorBytes)
-            //    Console.Write(b);
-            //Console.WriteLine();
-            #endregion
-
-            return ASCIIEncoding.ASCII.GetString(xorBytes);
+            return new Tuple<string, string>(first, second);
         }
     }
 }

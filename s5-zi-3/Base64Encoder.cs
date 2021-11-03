@@ -14,20 +14,37 @@ namespace s5_zi_3
         public static string Base64Alphabet => _base64alphabet;
         public static char FillSymbol => _fillSymbol;
 
-        public static char[] Encode(string info)
+
+        public static byte[] GetBase64Bytes(string text)
         {
-            var bytes = Encoding.ASCII.GetBytes(info);
-            var bits = s5_zi_2.Encoder.GetBitsFromBytes(bytes);
+            byte[] bytes = new byte[text.Length];
 
-            var baseIndexes = GetBase64Indexes(bits);
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (_base64alphabet.Contains(text[i]))
+                    bytes[i] = (byte)_base64alphabet.IndexOf(text[i]);
+                else
+                    bytes[i] = 65;
+            }
+            return bytes;
+        }
 
-            var messageLenth = baseIndexes.Length % 4 == 0 ? baseIndexes.Length : ((baseIndexes.Length % 4 == 2) ? baseIndexes.Length + 2 : baseIndexes.Length + 1);
+        public static string GetString(byte[] bytes)
+        {
+            var messageLenth = bytes.Length % 4 == 0 ? bytes.Length : ((bytes.Length % 4 == 2) ? bytes.Length + 2 : bytes.Length + 1);
             char[] message = new char[messageLenth];
 
             for (int i = 0; i < messageLenth; i++)
-            {
-                message[i] = i < baseIndexes.Length ? _base64alphabet[baseIndexes[i]] : _fillSymbol;
-            }
+                message[i] = i < bytes.Length ? _base64alphabet[bytes[i] & 63] : _fillSymbol; // &63 -- чтобы взять только 6 битов числа
+            return new string(message);
+        }
+
+        public static string Encode(string info)
+        {
+            var bytes = Encoding.ASCII.GetBytes(info);
+            var bits = s5_zi_2.Encoder.GetBitsFromBytes(bytes);
+            var baseIndexes = GetBase64Indexes(bits);
+            var message = GetString(baseIndexes);
 
             #region Debug output
             //Console.WriteLine(bits.Length);
@@ -38,20 +55,20 @@ namespace s5_zi_3
             return message;
         }
 
-        static int[] GetBase64Indexes(bool[] bits)
+        static byte[] GetBase64Indexes(bool[] bits)
         {
             var indAmount = bits.Length % 24 == 0 ? bits.Length / 6 : bits.Length / 6 + 1;
-            var indexes = new int[indAmount];
+            var indexes = new byte[indAmount];
 
             for (int i = 0; i < indexes.Length; i++)
             {
-                int index = 0;
+                byte index = 0;
                 for (int j = 0; j < 6; j++)
                 {
                     int place = i * 6 + 5 - j;
                     // заполняем нулями справа, если число битов не делится ровно на 6
                     if (place < bits.Length)
-                        index += bits[place] ? (1 << j) : 0;
+                        index += (byte)(bits[place] ? (1 << j) : 0);
                 }
                 indexes[i] = index;
             }
@@ -63,6 +80,5 @@ namespace s5_zi_3
             #endregion
             return indexes;
         }
-
     }
 }
