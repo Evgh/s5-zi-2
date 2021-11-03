@@ -8,32 +8,24 @@ namespace s5_zi_3
 {
     public static class XOR
     {
-        public static string ExecuteXorAscii(string first, string second)
+        public static string ExecuteXor(string first, string second, Func<string, byte[]> getBytes = null, Func<byte[], string> getString = null)
         {
+            if (getBytes == null || getString == null)
+            {
+                getBytes = ASCIIEncoding.ASCII.GetBytes;
+                getString = ASCIIEncoding.ASCII.GetString;
+            }
+
             var fixLength = FixLength(first, second);
             first = fixLength.Item1;
             second = fixLength.Item2;
 
-            var firstAscii = ASCIIEncoding.ASCII.GetBytes(first); 
-            var secondAscii = ASCIIEncoding.ASCII.GetBytes(second);
+            var firstAscii = getBytes(first);
+            var secondAscii = getBytes(second);
 
             var xor = ExecuteXor(firstAscii, secondAscii);
 
-            return ASCIIEncoding.ASCII.GetString(xor);
-        }
-
-        public static string ExecuteXorBase64(string first, string second)
-        {
-            var fixLength = FixLength(first, second);
-            first = fixLength.Item1;
-            second = fixLength.Item2;
-
-            var firstBase64 = Base64Encoder.GetBase64Bytes(first);
-            var secondBase64 = Base64Encoder.GetBase64Bytes(second);
-
-            var xor = ExecuteXor(firstBase64, secondBase64);
-
-            return Base64Encoder.GetString(xor);
+            return getString(xor);
         }
 
         public static byte[] ExecuteXor(byte[] firstBytes, byte[] secondBytes)
@@ -49,6 +41,17 @@ namespace s5_zi_3
             #endregion
             return xor;
         }
+
+        public static string ExecuteXorAscii(string first, string second)
+        {
+            return ExecuteXor(first, second, ASCIIEncoding.ASCII.GetBytes, ASCIIEncoding.ASCII.GetString);
+        }
+
+        public static string ExecuteXorBase64(string first, string second)
+        {
+            return ExecuteXor(first, second, Base64Encoder.GetBase64Bytes, Base64Encoder.GetString);
+        }
+
 
         private static Tuple<string, string> FixLength(string first, string second)
         {
