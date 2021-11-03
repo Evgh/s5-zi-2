@@ -27,7 +27,7 @@ namespace s5_zi_2
             Alphabet alphabet = new Alphabet(alphabetStr);
             string text = FileSlave.ReadFileToEnd(source);
 
-            alphabet.CountEntropy(text.ToLower());
+            alphabet.CountAllEntropies(text);
 
             alphabet.PrintAllData();
             alphabet.PrintASCIIInfoAmount(strInput.ToLower());

@@ -8,8 +8,11 @@ namespace s5_zi_3
 {
     public static class Base64Encoder
     {
-        static string base64alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        static char fillSymbol = '=';
+        static string _base64alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        static char _fillSymbol = '=';
+
+        public static string Base64Alphabet => _base64alphabet;
+        public static char FillSymbol => _fillSymbol;
 
         public static char[] Encode(string info)
         {
@@ -23,12 +26,13 @@ namespace s5_zi_3
 
             for (int i = 0; i < messageLenth; i++)
             {
-                message[i] = i < baseIndexes.Length ? base64alphabet[baseIndexes[i]] : fillSymbol;
+                message[i] = i < baseIndexes.Length ? _base64alphabet[baseIndexes[i]] : _fillSymbol;
             }
 
             #region Debug output
-            //Console.WriteLine(messageLenth);
-            //Console.WriteLine(message);
+            Console.WriteLine(bits.Length);
+            Console.WriteLine(messageLenth);
+            Console.WriteLine(message);
             #endregion
 
             return message;

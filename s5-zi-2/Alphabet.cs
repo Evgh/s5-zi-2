@@ -13,27 +13,35 @@ namespace s5_zi_2
         public readonly int N;
         
         public double Entropy { get; set; }
-        public double BynaryEntropy { get; set; }
+        public double EntropyBynary { get; set; }
+        public double EntropyChartley { get; set; }
+        public double Redundancy => (EntropyChartley == 0) ? 0 : ((EntropyChartley - Entropy) / EntropyChartley) * 100;
 
         public Alphabet(string setAlphabet)
         {
             Entropy = 0;
-            BynaryEntropy = 0;
+            EntropyBynary = 0;
 
             _alphabet = setAlphabet.ToCharArray();
             N = _alphabet.Length;
         }
 
-        public void CountEntropy(string text)
+        public void CountAllEntropies(string text)
+        {
+            CountEntropy(text);
+            CountEntropyChartley();
+            CountBynaryEntropy(text);
+        }
+
+        public double CountEntropy(string text)
         {
             _allSymStat = new List<SuperSymbol>();
 
             char[] arrText = text.ToCharArray();
             int textLength = 0;
-            int buff;
 
             for (int y = 0; y < arrText.Length; y++)
-                if (Char.IsLetter(arrText[y]) || int.TryParse($"{arrText[y]}", out buff))  
+                if (_alphabet.Contains(arrText[y]))  
                     textLength++;
 
             for (int i = 0; i < _alphabet.Length; i++)
@@ -41,7 +49,7 @@ namespace s5_zi_2
                 SuperSymbol temp = new SuperSymbol { Symbol = _alphabet[i] };
 
                 for (int y = 0; y < arrText.Length; y++)
-                    if ((Char.IsLetter(arrText[y]) || int.TryParse($"{arrText[y]}", out buff)) && temp.Symbol == arrText[y])
+                    if (_alphabet.Contains(arrText[y]) && temp.Symbol == arrText[y])
                         temp.NumOfOccurrences++;
 
 
@@ -52,10 +60,16 @@ namespace s5_zi_2
                     Entropy += -temp.Chance * Math.Log(temp.Chance, 2);
             }
 
-            CountBynaryEntropy(text);
+            return Entropy;
         }
 
-        private void CountBynaryEntropy(string text)
+        public double CountEntropyChartley()
+        {
+            EntropyChartley = Math.Log(_alphabet.Length, 2);
+            return EntropyChartley;   
+        }
+
+        public double CountBynaryEntropy(string text)
         {
             byte[] buf = Encoding.UTF8.GetBytes(text);
             double byteZero = 0;
@@ -73,18 +87,23 @@ namespace s5_zi_2
                     byteZero++;
             }
 
-            BynaryEntropy = -(byteOne / lenth * Math.Log(byteOne / lenth, 2) + byteZero / lenth * Math.Log(byteZero / lenth));
+            EntropyBynary = -(byteOne / lenth * Math.Log(byteOne / lenth, 2) + byteZero / lenth * Math.Log(byteZero / lenth));
+            return EntropyBynary;
         }
-        private double GetEffectiveEntropy(double errorChance)
+
+        public double GetEffectiveEntropy(double errorChance)
         {
             return (1 - (-errorChance * Math.Log(errorChance, 2) - (1 - errorChance) * Math.Log(1 - errorChance, 2)));
         }
+
 
         public void PrintAllData()
         {
             Console.WriteLine($"Alphabet: [{new string(_alphabet)}] - [{N}]");
             Console.WriteLine("Entropy - " + Entropy);
-            Console.WriteLine("Binary entropy :" + BynaryEntropy);
+            Console.WriteLine("Chartley entropy - " + EntropyChartley);
+            Console.WriteLine("Binary entropy :" + EntropyBynary);
+            Console.WriteLine("Redundancy - " + Redundancy);
 
             for (int i = 0; i < _allSymStat.Count; i++)
                 Console.WriteLine(_allSymStat[i].Symbol + " - " + Math.Round(_allSymStat[i].Chance, 5) + " - " + _allSymStat[i].NumOfOccurrences);
@@ -92,7 +111,7 @@ namespace s5_zi_2
 
         public void PrintASCIIInfoAmount(string str)
         {
-            Console.WriteLine($"ASCII: {str.Length * BynaryEntropy * 8} ");
+            Console.WriteLine($"ASCII: {str.Length * EntropyBynary * 8} ");
         }
 
         public void PtintInfoAmount(string str)
