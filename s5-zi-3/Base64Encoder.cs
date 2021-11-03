@@ -30,9 +30,9 @@ namespace s5_zi_3
             }
 
             #region Debug output
-            Console.WriteLine(bits.Length);
-            Console.WriteLine(messageLenth);
-            Console.WriteLine(message);
+            //Console.WriteLine(bits.Length);
+            //Console.WriteLine(messageLenth);
+            //Console.WriteLine(message);
             #endregion
 
             return message;

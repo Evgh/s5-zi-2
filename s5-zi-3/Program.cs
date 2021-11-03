@@ -16,8 +16,9 @@ namespace s5_zi_3
 
             Lab3Routine($"{Base64Encoder.Base64Alphabet}{Base64Encoder.FillSymbol}", new string(Base64Encoder.Encode(info+"a")));
 
-            //Console.WriteLine(info);
-            //Console.WriteLine(Base64Encoder.Encode(info));
+
+            Console.WriteLine(XOR.ExecuteXorAscii("Kasperovich", "Eugeniya"));
+            Console.WriteLine(XOR.ExecuteXorAscii(XOR.ExecuteXorAscii("Kasperovich", "Eugeniya"), "Eugeniya"));
 
         }
 
@@ -28,7 +29,6 @@ namespace s5_zi_3
             alphabet.CountAllEntropies(text);
             alphabet.PrintAllData();
 
-            //alphabet.PrintInfoAmount(strInput.ToLower(), 1.0);
 
             Console.WriteLine("___");
             Console.WriteLine();
