@@ -35,7 +35,7 @@ namespace s5_zi_3
             char[] message = new char[messageLenth];
 
             for (int i = 0; i < messageLenth; i++)
-                message[i] = i < bytes.Length ? _base64alphabet[bytes[i] & 63] : _fillSymbol; // &63 -- чтобы взять только 6 битов числа
+                message[i] = !(i < bytes.Length) ? _fillSymbol : !(bytes[i] < _base64alphabet.Length) ? _fillSymbol : _base64alphabet[bytes[i]];
             return new string(message);
         }
 
