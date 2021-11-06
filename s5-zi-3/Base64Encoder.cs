@@ -14,6 +14,21 @@ namespace s5_zi_3
         public static string Base64Alphabet => _base64alphabet;
         public static char FillSymbol => _fillSymbol;
 
+        public static string Encode(string info)
+        {
+            var bytes = Encoding.ASCII.GetBytes(info);
+            var bits = s5_zi_2.Encoder.GetBitsFromBytes(bytes);
+            var baseIndexes = GetBase64Indexes(bits);
+            var message = GetString(baseIndexes);
+
+            #region Debug output
+            //Console.WriteLine(bits.Length);
+            //Console.WriteLine(messageLenth);
+            //Console.WriteLine(message);
+            #endregion
+
+            return message;
+        }
 
         public static byte[] GetBase64Bytes(string text)
         {
@@ -39,21 +54,6 @@ namespace s5_zi_3
             return new string(message);
         }
 
-        public static string Encode(string info)
-        {
-            var bytes = Encoding.ASCII.GetBytes(info);
-            var bits = s5_zi_2.Encoder.GetBitsFromBytes(bytes);
-            var baseIndexes = GetBase64Indexes(bits);
-            var message = GetString(baseIndexes);
-
-            #region Debug output
-            //Console.WriteLine(bits.Length);
-            //Console.WriteLine(messageLenth);
-            //Console.WriteLine(message);
-            #endregion
-
-            return message;
-        }
 
         static byte[] GetBase64Indexes(bool[] bits)
         {
