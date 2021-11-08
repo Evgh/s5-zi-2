@@ -41,5 +41,12 @@ namespace s5_zi_2
             #endregion
             return bits;
         }
+
+        public static void PrintAsBynary(this bool[] message)
+        {
+            foreach (var bit in message)
+                Console.Write(bit ? 1 : 0);
+            Console.WriteLine();
+        }
     }
 }
