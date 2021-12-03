@@ -14,7 +14,7 @@ namespace s5_zi_10
         private static string _message;
         private static int _windowSize;
 
-        public static List<CodingTriad> Encode(string message, int bufferSize, int windowSize)
+        public static List<CodingTriad> Encode(string message, int bufferSize, int windowSize, bool enableLogging = false)
         {
             InitializeEncodingWelcher(message, bufferSize, windowSize);
 
@@ -22,11 +22,14 @@ namespace s5_zi_10
             {                
                 _encodedMessage.Add(GetNext());
 
-                Console.WriteLine($"Buffer: {string.Join(' ', _buffer)}"); 
-                Console.WriteLine($"Window: {string.Join(' ', _window)}");
-                Console.WriteLine($"Message: {string.Join(' ', _message)}");
-                Console.WriteLine($"Encoded: {string.Join('|', _encodedMessage)}");
-                Console.WriteLine();
+                if (enableLogging)
+                {
+                    Console.WriteLine($"Buffer: {string.Join(' ', _buffer)}");
+                    Console.WriteLine($"Window: {string.Join(' ', _window)}");
+                    Console.WriteLine($"Message: {string.Join(' ', _message)}");
+                    Console.WriteLine($"Encoded: {string.Join('|', _encodedMessage)}");
+                    Console.WriteLine();
+                }
             }
 
             return _encodedMessage;
@@ -68,9 +71,9 @@ namespace s5_zi_10
 
         private static void FillWindow()
         {
-            while (_window != null && _message != null && _window.Length < _windowSize)
+            while (_message != null && (_window == null || _window.Length < _windowSize))
             {
-                _window = string.Concat(_window, _message[0]);
+                _window = string.Concat(_window ?? string.Empty, _message[0]);
                 _message = _message.RemoveFirstSymbol();
             }
         }
@@ -108,7 +111,7 @@ namespace s5_zi_10
                 symbol = _window[0];
                 _window = _window.RemoveFirstSymbol();
             }
-            else if (_message != null) // если перегнали в буфер все сообщение 
+            else if (_message != null) // если перегнали в буфер все сообщение из окна
             {
                 symbol = _message[0];
                 _message = _message.RemoveFirstSymbol();
