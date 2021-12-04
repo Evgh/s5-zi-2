@@ -25,11 +25,20 @@ namespace s5_zi_9
         }
 
         private List<HuffmanBranch> lettersTree;
+        private Dictionary<string, string> codes;
+        private Dictionary<string, string> revertCodes;
+
 
         public void ConsoleH()
         {
             Console.WriteLine();
-            lettersTree.ForEach(s => Console.WriteLine(s.values + "  -  " + s.chance));
+
+            foreach(var s in lettersTree)
+            {
+                Console.WriteLine(s.values + "  -  " + s.chance);
+            }
+
+            //lettersTree.ForEach(s => Console.WriteLine(s.values + "  -  " + s.chance));
         }
 
         public void CreateLettersInWordList(string message)
@@ -66,7 +75,7 @@ namespace s5_zi_9
 
             for (int i = 0; i < alphabet.Length; i++)
             {
-                if (!message.Contains(alphabet[i]))
+                if (!arrText.Contains(alphabet[i]))
                 {
                     continue;
                 }
@@ -89,7 +98,7 @@ namespace s5_zi_9
             ConsoleH();
         }
 
-        public void HuffmanAlgorithmMethod()
+        public string HuffmanAlgorithmMethod(string message)
         {
             List<HuffmanBranch> asd = new List<HuffmanBranch>();
 
@@ -124,17 +133,53 @@ namespace s5_zi_9
                 lettersTree = lettersTree.OrderByDescending(u => u.chance).ToList();
             }
 
+            codes = new Dictionary<string, string>();
+            revertCodes = new Dictionary<string, string>();
+
             for (int i = 0; i < asd.Count; i++)
             {
                 HuffmanBranch temp = asd[i];
+                (string, string) tempTuple = (string.Empty, string.Empty);
 
-                Console.Write("\n" + temp.values + " - ");
+                //Console.Write("\n" + temp.values + " - ");
+                tempTuple.Item1 = temp.values;
+
                 for (; temp.branch != null; temp = temp.branch)
                 {
-                    Console.Write(temp.bynary_value + " ");
+                    //Console.Write(temp.bynary_value + " ");
+                    tempTuple.Item2 = string.Concat(tempTuple.Item2 ?? string.Empty, temp.bynary_value);
                 }
-                Console.WriteLine();
+
+                codes.Add(tempTuple.Item1, tempTuple.Item2);
+                revertCodes.Add(tempTuple.Item2, tempTuple.Item1);
             }
+            Console.WriteLine(string.Join('\n', codes));
+            Console.WriteLine();
+
+            var newMessage = string.Empty;
+            foreach(var letter in message)
+            {
+                Console.WriteLine($"{letter} - {codes[$"{letter}"]}");
+                newMessage = string.Concat(newMessage, codes[$"{letter}"]);
+            }
+
+            Console.WriteLine(newMessage);
+
+            return newMessage;
+        }
+
+        public void Decode(string encoded)
+        {
+            string temp = string.Empty;
+            for (int i = 0; i < encoded.Length; i++)
+            {
+                temp = string.Concat(temp, encoded[i]);
+                if (revertCodes.ContainsKey(temp))
+                {
+                    Console.WriteLine(revertCodes[temp]);
+                    temp = string.Empty;
+                }
+            } 
         }
     }
 }

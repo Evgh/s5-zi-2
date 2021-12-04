@@ -101,7 +101,7 @@ namespace s5_zi_11
                 ResultVuvods.Kod = i;
                 ResultVuvods.Nizhni_gran = compress;
                 InformationString.Sb.Append(ResultVuvods.ToStrings()).Append(Environment.NewLine);
-                char symbol = Vuvods.Find(x => Math.Round(compress, t) >= x.Nizhni_gran && Math.Round(compress, t) < x.Verhni_gran).Symvol;
+                char symbol = Vuvods.Find(x => Math.Round(compress, 15) >= x.Nizhni_gran && Math.Round(compress, 15) <= x.Verhni_gran).Symvol;
                 sb.Append(symbol);
                 Vuvod tempNode = Vuvods.Find(x => x.Symvol == symbol);
                 compress = (compress - tempNode.Nizhni_gran) / (tempNode.Verhni_gran - tempNode.Nizhni_gran);
@@ -150,7 +150,7 @@ namespace s5_zi_11
             }
 
             double nizhni_z = Nizhni * (Math.Pow(10, k));
-            nizhni_z = (int)nizhni_z + 1 / Math.Pow(10, k);
+            nizhni_z = (nizhni_z + 1) / Math.Pow(10, k);
 
             Console.WriteLine($"Нижняя граница последнего символа: {nizhni_z.ToString()}\n" +
                     "Обратное преобразование: \n" +

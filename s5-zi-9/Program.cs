@@ -14,12 +14,13 @@ namespace s5_zi_9
 
         public static void Main(string[] args)
         {
-            string message = "Касперович Евгения";
+            string message = "КасперовичЕвгения";
             Console.WriteLine();
 
             var alg = new Huffman();
             alg.CreateLettersInWordList(message);
-            alg.HuffmanAlgorithmMethod();
+            var mess = alg.HuffmanAlgorithmMethod(message);
+            alg.Decode(mess);
 
             Console.WriteLine("====================================");
 
@@ -27,7 +28,7 @@ namespace s5_zi_9
             string alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
             alg.CreateLettersInTextList(message.ToLower(), text.ToLower(), alphabet);
-            alg.HuffmanAlgorithmMethod();
+            alg.HuffmanAlgorithmMethod(message.ToLower());
 
 
             Console.ReadKey();
