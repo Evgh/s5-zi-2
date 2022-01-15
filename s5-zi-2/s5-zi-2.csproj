@@ -3,11 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>s5_zi_2</RootNamespace>
+    <RootNamespace>s5_zi_all</RootNamespace>
+    <AssemblyName>s5-zi-all</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CummonLogic\CommonLogic.csproj" />
+    <ProjectReference Include="..\CommonLogic\CommonLogic.csproj" />
   </ItemGroup>
 
 </Project>
