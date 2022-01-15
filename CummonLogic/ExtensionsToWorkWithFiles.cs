@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace CummonLogic
+namespace CommonLogic
 {
     public static class ExtensionsToWorkWithFiles
     {

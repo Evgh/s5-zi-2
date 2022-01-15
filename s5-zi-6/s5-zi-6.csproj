@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CummonLogic\CummonLogic.csproj" />
+    <ProjectReference Include="..\CummonLogic\CommonLogic.csproj" />
   </ItemGroup>
 
 </Project>

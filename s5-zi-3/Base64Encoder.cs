@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using CummonLogic;
+using CommonLogic;
 
 namespace s5_zi_3
 {

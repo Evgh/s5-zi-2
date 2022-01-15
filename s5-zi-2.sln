@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "s5-zi-9", "s5-zi-9\s5-zi-9.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "s5-zi-11", "s5-zi-11\s5-zi-11.csproj", "{30224776-9D8F-484A-A4A4-7468608073D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CummonLogic", "CummonLogic\CummonLogic.csproj", "{BD70D3E9-C440-4212-AD96-83E018483444}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLogic", "CummonLogic\CommonLogic.csproj", "{BD70D3E9-C440-4212-AD96-83E018483444}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CummonLogic;
+using CommonLogic;
 
 namespace s5_zi_4
 {

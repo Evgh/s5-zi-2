@@ -1,5 +1,5 @@
 ﻿using System;
-using CummonLogic;
+using CommonLogic;
 using s5_zi_2;
 
 namespace s5_zi_3

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CummonLogic
+namespace CommonLogic
 {
     public static class BynaryEncoder
     {
