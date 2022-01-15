@@ -26,7 +26,7 @@ namespace s5_zi_3
         {
             Alphabet alphabet = new Alphabet(alphabetStr);
 
-            alphabet.CountAllEntropies(text);
+            alphabet.CalculateAllEntropies(text);
             alphabet.PrintAllData();
 
             Console.WriteLine("___");

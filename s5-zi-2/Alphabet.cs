@@ -2,127 +2,172 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using CummonLogic;
+using s5_zi_2.Exceptions;
 
 namespace s5_zi_2
 {
     public class Alphabet
     {
-        private char[] _alphabet;
-        private List<SuperSymbol> _allSymStat;
-        public readonly int N;
-        
-        public double Entropy { get; set; }
-        public double EntropyBynary { get; set; }
-        public double EntropyChartley { get; set; }
-        public double Redundancy => (EntropyChartley == 0) ? 0 : ((EntropyChartley - Entropy) / EntropyChartley) * 100;
+        public readonly int AlphabetLength;
 
-        public Alphabet(string setAlphabet)
+        private char[] _alphabet;
+        private List<SuperSymbol> _alphabetWithStatistics;
+        
+        public double EntropyShennon { get; set; }
+        public double EntropyChartley { get; set; }
+        public double EntropyBynary { get; set; }
+        public double Redundancy { get; set; }
+
+        public double EffectiveEntropy { get; set; }
+
+        public Alphabet(string alphabet)
         {
-            Entropy = 0;
+            EntropyShennon = 0;
+            EntropyChartley = 0;
             EntropyBynary = 0;
 
-            _alphabet = setAlphabet.ToCharArray();
-            N = _alphabet.Length;
+            _alphabet = alphabet.ToCharArray();
+            AlphabetLength = _alphabet.Length;
         }
 
-        public void CountAllEntropies(string text)
+        #region Public Methods
+
+        public void CalculateAllEntropies(string baseForStatistics)
         {
-            CountEntropy(text);
-            CountEntropyChartley();
-            CountBynaryEntropy(text);
+            CalculateEntropyChennon(baseForStatistics);
+            CalculateEntropyChartley();
+            CalculateBynaryEntropy(baseForStatistics);
+
+            CalculateRedundancy();
         }
 
-        public double CountEntropy(string text)
+        public void CalculateEntropyChennon(string baseForStatistics)
         {
-            _allSymStat = new List<SuperSymbol>();
+            CalculateAlphabetStatistics(baseForStatistics);
+            CalculateEntropyShennonFromStatistics();
+        }
 
-            char[] arrText = text.ToCharArray();
-            int textLength = 0;
+        public void CalculateEntropyChartley()
+        {
+            EntropyChartley = Math.Log(_alphabet.Length, 2);
+        }
 
-            for (int y = 0; y < arrText.Length; y++)
-                if (_alphabet.Contains(arrText[y]))  
-                    textLength++;
+        public void CalculateBynaryEntropy(string text)
+        {
+            int bitZeroCount;
+            int bitOneCount;
+            int length;
+
+            length = CountBitsOccurences(text, out bitOneCount, out bitZeroCount);
+            CalculateBynaryEntropy(bitOneCount, bitZeroCount, length);
+        }
+
+        public void CalculateEffectiveEntropy(double errorChance)
+        {
+            EffectiveEntropy = (1 - (-errorChance * Math.Log(errorChance, 2) - (1 - errorChance) * Math.Log(1 - errorChance, 2)));
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void CalculateRedundancy()
+        {
+            Redundancy = (EntropyChartley == 0) ? 0 : ((EntropyChartley - EntropyShennon) / EntropyChartley) * 100;
+        }
+
+        private void CalculateBynaryEntropy(double bitOneCount, double bitZeroCount, double length)
+        {
+            EntropyBynary = - (bitOneCount / length * Math.Log(bitOneCount / length, 2) + bitZeroCount / length * Math.Log(bitZeroCount / length, 2));
+        }
+
+        private void CalculateEntropyShennonFromStatistics()
+        {
+            if (_alphabetWithStatistics == null)
+                throw new StatisticsIsNotGatheredException();
+
+            foreach (var symbol in _alphabetWithStatistics)
+                if (symbol.Chance != 0)
+                    EntropyShennon += -symbol.Chance * Math.Log(symbol.Chance, 2);            
+        }
+
+        private void CalculateAlphabetStatistics(string baseForStatistics)
+        {
+            _alphabetWithStatistics = new List<SuperSymbol>();
+
+            char[] workText = baseForStatistics.ToCharArray();
+            int accurateTextLength = CountAlphabetSymbolsOccurence(workText);
 
             for (int i = 0; i < _alphabet.Length; i++)
             {
                 SuperSymbol temp = new SuperSymbol { Symbol = _alphabet[i] };
+                temp.AmountOfOccurrences = CountAmountOfSymbolOccurences(workText, temp.Symbol);
+                temp.Chance = (double)temp.AmountOfOccurrences / (double)accurateTextLength;
 
-                for (int y = 0; y < arrText.Length; y++)
-                    if (_alphabet.Contains(arrText[y]) && temp.Symbol == arrText[y])
-                        temp.NumOfOccurrences++;
-
-
-                temp.Chance = (double)temp.NumOfOccurrences / (double)textLength;
-                _allSymStat.Add(temp);
-
-                if (temp.Chance != 0) 
-                    Entropy += -temp.Chance * Math.Log(temp.Chance, 2);
+                _alphabetWithStatistics.Add(temp);
             }
-
-            return Entropy;
         }
 
-        public double CountEntropyChartley()
+        private int CountAlphabetSymbolsOccurence(char[] someText)
         {
-            EntropyChartley = Math.Log(_alphabet.Length, 2);
-            return EntropyChartley;   
+            int textLength = 0;
+
+            foreach(var symbol in someText)
+                if (_alphabet.Contains(symbol))
+                    textLength++;
+
+            return textLength;
         }
 
-        public double CountBynaryEntropy(string text)
+        private int CountAmountOfSymbolOccurences(char[] someText, char symbol)
         {
-            byte[] buf = Encoding.UTF8.GetBytes(text);
-            double byteZero = 0;
-            double byteOne = 0;
-            double lenth;
+            int numOfOccurences = 0;
 
-            var bits = s5_zi_2.Encoder.GetBitsFromBytes(buf);
-            lenth = bits.Length;
+            for (int y = 0; y < someText.Length; y++)
+                if (_alphabet.Contains(someText[y]) && symbol == someText[y])
+                    numOfOccurences++;
+
+            return numOfOccurences;
+        }
+
+        private int CountBitsOccurences(string baseForStatistics, out int bitOneCount, out int bitZeroCount)
+        {
+            byte[] buf = Encoding.UTF8.GetBytes(baseForStatistics);
+            var bits = BynaryEncoder.GetBitsFromBytes(buf);
+
+            bitOneCount = 0;
+            bitZeroCount = 0;
 
             foreach (var bit in bits)
             {
                 if (bit)
-                    byteOne++;
+                    bitOneCount++;
                 else
-                    byteZero++;
+                    bitZeroCount++;
             }
 
-            EntropyBynary = -(byteOne / lenth * Math.Log(byteOne / lenth, 2) + byteZero / lenth * Math.Log(byteZero / lenth));
-            return EntropyBynary;
+            return bits.Length;
         }
 
-        public double GetEffectiveEntropy(double errorChance)
+        #endregion
+
+        #region Overriden Methods 
+        public override string ToString()
         {
-            return (1 - (-errorChance * Math.Log(errorChance, 2) - (1 - errorChance) * Math.Log(1 - errorChance, 2)));
+            StringBuilder stringBuilder = new();
+
+            stringBuilder.Append($"Alphabet: [{new string(_alphabet)}] - [{AlphabetLength}]\n");
+            stringBuilder.Append($"Entropy - {EntropyShennon}\n");
+            stringBuilder.Append($"Chartley entropy - {EntropyChartley}\n");
+            stringBuilder.Append($"Binary entropy {EntropyBynary}\n");
+            stringBuilder.Append($"Redundancy - {Redundancy}\n");
+
+            for (int i = 0; i < _alphabetWithStatistics.Count; i++)
+                stringBuilder.Append($"{_alphabetWithStatistics[i].Symbol} - {Math.Round(_alphabetWithStatistics[i].Chance, 5)} - {_alphabetWithStatistics[i].AmountOfOccurrences}\n");
+
+            return stringBuilder.ToString();
         }
-
-
-        public void PrintAllData()
-        {
-            Console.WriteLine($"Alphabet: [{new string(_alphabet)}] - [{N}]");
-            Console.WriteLine("Entropy - " + Entropy);
-            Console.WriteLine("Chartley entropy - " + EntropyChartley);
-            Console.WriteLine("Binary entropy :" + EntropyBynary);
-            Console.WriteLine("Redundancy - " + Redundancy);
-
-            for (int i = 0; i < _allSymStat.Count; i++)
-                Console.WriteLine(_allSymStat[i].Symbol + " - " + Math.Round(_allSymStat[i].Chance, 5) + " - " + _allSymStat[i].NumOfOccurrences);
-        }
-
-        public void PrintASCIIInfoAmount(string str)
-        {
-            Console.WriteLine($"ASCII: {str.Length * EntropyBynary * 8} ");
-        }
-
-        public void PtintInfoAmount(string str)
-        {
-            Console.WriteLine($"Info amount: {str.Length * Entropy}");
-        }
-
-        public void PrintInfoAmount(string str, double errorChance)
-        {
-            double effectiveEntropy = GetEffectiveEntropy(errorChance);
-            Console.WriteLine($"Error chance: {errorChance},  Info amount: {str.Length * effectiveEntropy}");
-        }
+        #endregion
     }
 }

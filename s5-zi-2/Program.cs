@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using CummonLogic;
 
 namespace s5_zi_2
 {
@@ -22,21 +22,21 @@ namespace s5_zi_2
             Console.ReadLine();
         }
 
-        private static void AlphabetRoutine(string alphabetStr, string source, string strInput)
+        private static void AlphabetRoutine(string alphabetStr, string source, string randomSample)
         {
-            Alphabet alphabet = new Alphabet(alphabetStr);
-            string text = FileSlave.ReadFileToEnd(source);
+            Alphabet alphabet = new(alphabetStr);
+            AlphabetInformationPrinter informationAmountPrinter = new(alphabet);
 
-            alphabet.CountAllEntropies(text);
+            string sourceForStatisticsGeneration = source.ReadAsFileSourceFromProjectRoot();
+            alphabet.CalculateAllEntropies(sourceForStatisticsGeneration);
 
-            alphabet.PrintAllData();
-            alphabet.PrintASCIIInfoAmount(strInput.ToLower());
-            alphabet.PtintInfoAmount(strInput.ToLower());
+            informationAmountPrinter.PrintAlphabetData();
+            informationAmountPrinter.PrintASCIIInfoAmount(randomSample.ToLower());
+            informationAmountPrinter.PtintInfoAmount(randomSample.ToLower());
 
-            alphabet.PrintInfoAmount(strInput.ToLower(), 0.1);
-            alphabet.PrintInfoAmount(strInput.ToLower(), 0.5);
-            alphabet.PrintInfoAmount(strInput.ToLower(), 0.9999);
-            //alphabet.PrintInfoAmount(strInput.ToLower(), 1.0);
+            informationAmountPrinter.PrintInfoAmountWithErrorChance(randomSample.ToLower(), 0.1);
+            informationAmountPrinter.PrintInfoAmountWithErrorChance(randomSample.ToLower(), 0.5);
+            informationAmountPrinter.PrintInfoAmountWithErrorChance(randomSample.ToLower(), 0.9999);
 
             Console.WriteLine("___");
             Console.WriteLine();
