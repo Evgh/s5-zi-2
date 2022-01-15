@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using s5_zi_2;
+using CummonLogic;
 
 namespace s5_zi_5
 {

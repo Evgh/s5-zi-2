@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using s5_zi_2;
+using CummonLogic;
 
 namespace s5_zi_5
 {
