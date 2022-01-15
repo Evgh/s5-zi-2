@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using CummonLogic;
 
 namespace s5_zi_4
 {
@@ -24,7 +24,7 @@ namespace s5_zi_4
             _encodedMessage = new List<bool>();
 
             var messageBytes = ASCIIEncoding.ASCII.GetBytes(message);
-            _pureMessage = s5_zi_2.Encoder.GetBitsFromBytes(messageBytes).ToList();
+            _pureMessage = BynaryEncoder.GetBitsFromBytes(messageBytes).ToList();
 
             k = _pureMessage.Count;
             r = (int)Math.Round(Math.Log(k, 2), 0) + 1;
@@ -138,23 +138,23 @@ namespace s5_zi_4
             foreach (var err in errIndexes)
                 Console.Write(err + ", ");
             Console.WriteLine();
-            s5_zi_2.Encoder.PrintAsBynary(sended.ToArray());
+            BynaryEncoder.PrintAsBynary(sended.ToArray());
 
             Console.WriteLine("pure: ");
-            s5_zi_2.Encoder.PrintAsBynary(pureSended.ToArray());
+            BynaryEncoder.PrintAsBynary(pureSended.ToArray());
             Console.WriteLine("encoded: ");
-            s5_zi_2.Encoder.PrintAsBynary(encoded.ToArray());
+            BynaryEncoder.PrintAsBynary(encoded.ToArray());
 
             Console.WriteLine("Синдром: ");
             Console.WriteLine(syndrome);
             Console.WriteLine("Ошибка в бите сообщения номер: ");
             Console.WriteLine(mask);
             Console.WriteLine("Сообщение исправлено: ");
-            s5_zi_2.Encoder.PrintAsBynary(repaired.ToArray());
+            BynaryEncoder.PrintAsBynary(repaired.ToArray());
         }
 
-        public void PrintMessage() => s5_zi_2.Encoder.PrintAsBynary(_pureMessage.ToArray());
-        public void PrintEncodedMessage() => s5_zi_2.Encoder.PrintAsBynary(_encodedMessage.ToArray());
+        public void PrintMessage() => BynaryEncoder.PrintAsBynary(_pureMessage.ToArray());
+        public void PrintEncodedMessage() => BynaryEncoder.PrintAsBynary(_encodedMessage.ToArray());
 
         #endregion
     }

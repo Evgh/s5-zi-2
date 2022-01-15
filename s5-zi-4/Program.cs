@@ -6,6 +6,11 @@ namespace s5_zi_4
     {
         static void Main(string[] args)
         {
+            ExecuteLab4Routine();
+        }
+
+        private static void ExecuteLab4Routine()
+        {
             Console.WriteLine("Lab 4");
 
             string message = "e";
@@ -13,16 +18,21 @@ namespace s5_zi_4
 
             Console.WriteLine("Порождающая матрица: ");
             hamming.HammingMatrix.Print();
+
             Console.WriteLine("Биты сообщения:");
             hamming.PrintMessage();
+
             Console.WriteLine("Биты с проверочными битами:");
             hamming.PrintEncodedMessage();
+
             Console.WriteLine("------------------------------------------------------------------------------");
 
             hamming.SendMessageWithErrors(0);
             Console.WriteLine("____________");
+
             hamming.SendMessageWithErrors(1);
             Console.WriteLine("____________");
+            
             hamming.SendMessageWithErrors(2);
             Console.WriteLine("____________");
         }
