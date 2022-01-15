@@ -15,12 +15,12 @@ namespace s5_zi_9
             public string values { get; set; }
             public double chance { get; set; }
 
-            public int bynary_value { get; set; }
+            public int binary_value { get; set; }
 
             public HuffmanBranch(string value)
             {
                 values = value;
-                bynary_value = -1;
+                binary_value = -1;
             }
         }
 
@@ -109,8 +109,8 @@ namespace s5_zi_9
 
             for (; lettersTree.Count != 1;)
             {
-                lettersTree[lettersTree.Count - 2].bynary_value = 1;
-                lettersTree[lettersTree.Count - 1].bynary_value = 0;
+                lettersTree[lettersTree.Count - 2].binary_value = 1;
+                lettersTree[lettersTree.Count - 1].binary_value = 0;
 
 
                 HuffmanBranch tmp = new HuffmanBranch($"{lettersTree[lettersTree.Count - 2].values}{lettersTree[lettersTree.Count - 1].values}")
@@ -119,8 +119,8 @@ namespace s5_zi_9
                 };
 
                 Console.WriteLine("sum chance - " +
-                    $"{lettersTree[lettersTree.Count - 2].values} - {lettersTree[lettersTree.Count - 2].bynary_value} " +
-                    $"|| {lettersTree[lettersTree.Count - 1].values} - {lettersTree[lettersTree.Count - 1].bynary_value}");
+                    $"{lettersTree[lettersTree.Count - 2].values} - {lettersTree[lettersTree.Count - 2].binary_value} " +
+                    $"|| {lettersTree[lettersTree.Count - 1].values} - {lettersTree[lettersTree.Count - 1].binary_value}");
 
                 lettersTree[lettersTree.Count - 2].branch = tmp;
                 lettersTree[lettersTree.Count - 1].branch = tmp;
@@ -141,13 +141,11 @@ namespace s5_zi_9
                 HuffmanBranch temp = asd[i];
                 (string, string) tempTuple = (string.Empty, string.Empty);
 
-                //Console.Write("\n" + temp.values + " - ");
                 tempTuple.Item1 = temp.values;
 
                 for (; temp.branch != null; temp = temp.branch)
                 {
-                    //Console.Write(temp.bynary_value + " ");
-                    tempTuple.Item2 = string.Concat(tempTuple.Item2 ?? string.Empty, temp.bynary_value);
+                    tempTuple.Item2 = string.Concat(tempTuple.Item2 ?? string.Empty, temp.binary_value);
                 }
 
                 codes.Add(tempTuple.Item1, tempTuple.Item2);

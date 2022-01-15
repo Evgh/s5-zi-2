@@ -2,7 +2,7 @@
 
 namespace CommonLogic
 {
-    public static class BynaryEncoder
+    public static class BinaryEncoder
     {
         public static bool[] GetBitsFromBytes(byte[] bytes)
         {
@@ -20,7 +20,7 @@ namespace CommonLogic
             return bits;
         }
 
-        public static void PrintAsBynary(this bool[] message)
+        public static void PrintAsBinary(this bool[] message)
         {
             foreach (var bit in message)
                 Console.Write(bit ? 1 : 0);

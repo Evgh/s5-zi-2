@@ -18,7 +18,7 @@ namespace s5_zi_2
 
         public void PrintASCIIInfoAmount(string str)
         {
-            Console.WriteLine($"ASCII: {str.Length * _alphabet.EntropyBynary * 8} ");
+            Console.WriteLine($"ASCII: {str.Length * _alphabet.EntropyBinary * 8} ");
         }
 
         public void PtintInfoAmount(string str)

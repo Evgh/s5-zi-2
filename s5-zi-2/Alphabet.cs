@@ -16,7 +16,7 @@ namespace s5_zi_2
         
         public double EntropyShennon { get; set; }
         public double EntropyChartley { get; set; }
-        public double EntropyBynary { get; set; }
+        public double EntropyBinary { get; set; }
         public double Redundancy { get; set; }
 
         public double EffectiveEntropy { get; set; }
@@ -25,7 +25,7 @@ namespace s5_zi_2
         {
             EntropyShennon = 0;
             EntropyChartley = 0;
-            EntropyBynary = 0;
+            EntropyBinary = 0;
 
             _alphabet = alphabet.ToCharArray();
             AlphabetLength = _alphabet.Length;
@@ -37,7 +37,7 @@ namespace s5_zi_2
         {
             CalculateEntropyChennon(baseForStatistics);
             CalculateEntropyChartley();
-            CalculateBynaryEntropy(baseForStatistics);
+            CalculateBinaryEntropy(baseForStatistics);
 
             CalculateRedundancy();
         }
@@ -53,14 +53,14 @@ namespace s5_zi_2
             EntropyChartley = Math.Log(_alphabet.Length, 2);
         }
 
-        public void CalculateBynaryEntropy(string text)
+        public void CalculateBinaryEntropy(string text)
         {
             int bitZeroCount;
             int bitOneCount;
             int length;
 
             length = CountBitsOccurences(text, out bitOneCount, out bitZeroCount);
-            CalculateBynaryEntropy(bitOneCount, bitZeroCount, length);
+            CalculateBinaryEntropy(bitOneCount, bitZeroCount, length);
         }
 
         public void CalculateEffectiveEntropy(double errorChance)
@@ -77,9 +77,9 @@ namespace s5_zi_2
             Redundancy = (EntropyChartley == 0) ? 0 : ((EntropyChartley - EntropyShennon) / EntropyChartley) * 100;
         }
 
-        private void CalculateBynaryEntropy(double bitOneCount, double bitZeroCount, double length)
+        private void CalculateBinaryEntropy(double bitOneCount, double bitZeroCount, double length)
         {
-            EntropyBynary = - (bitOneCount / length * Math.Log(bitOneCount / length, 2) + bitZeroCount / length * Math.Log(bitZeroCount / length, 2));
+            EntropyBinary = - (bitOneCount / length * Math.Log(bitOneCount / length, 2) + bitZeroCount / length * Math.Log(bitZeroCount / length, 2));
         }
 
         private void CalculateEntropyShennonFromStatistics()
@@ -134,7 +134,7 @@ namespace s5_zi_2
         private int CountBitsOccurences(string baseForStatistics, out int bitOneCount, out int bitZeroCount)
         {
             byte[] buf = Encoding.UTF8.GetBytes(baseForStatistics);
-            var bits = BynaryEncoder.GetBitsFromBytes(buf);
+            var bits = BinaryEncoder.GetBitsFromBytes(buf);
 
             bitOneCount = 0;
             bitZeroCount = 0;
@@ -160,7 +160,7 @@ namespace s5_zi_2
             stringBuilder.Append($"Alphabet: [{new string(_alphabet)}] - [{AlphabetLength}]\n");
             stringBuilder.Append($"Entropy - {EntropyShennon}\n");
             stringBuilder.Append($"Chartley entropy - {EntropyChartley}\n");
-            stringBuilder.Append($"Binary entropy {EntropyBynary}\n");
+            stringBuilder.Append($"Binary entropy {EntropyBinary}\n");
             stringBuilder.Append($"Redundancy - {Redundancy}\n");
 
             for (int i = 0; i < _alphabetWithStatistics.Count; i++)

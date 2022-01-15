@@ -14,7 +14,7 @@ namespace s5_zi_3
         public static string Encode(string info)
         {
             var bytes = Encoding.ASCII.GetBytes(info);
-            var bits = BynaryEncoder.GetBitsFromBytes(bytes);
+            var bits = BinaryEncoder.GetBitsFromBytes(bytes);
             var baseIndexes = GetBase64Indexes(bits);
             var message = GetString(baseIndexes);
 

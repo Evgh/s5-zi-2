@@ -16,9 +16,9 @@ namespace s5_zi_5
             int r = (int) (Math.Round(Math.Log(message.Length, 2), 0) + 1);
 
             Console.WriteLine("Сообщение: ");
-            message.PrintAsBynary();
+            message.PrintAsBinary();
             Console.WriteLine("Порождающий полином: ");
-            polynom.PrintAsBynary();
+            polynom.PrintAsBinary();
 
             var matrix = new Matrix(polynom, message.Length, r);
             bool[] encodedMessage = MessageMethods.EncodeMessage(polynom, message, r);
@@ -29,9 +29,9 @@ namespace s5_zi_5
             encodedMessageWithTwoFails.CreateError(2);
 
             Console.WriteLine("Сообщение с одной ошибкой:");
-            encodedMessageWithOneFail.PrintAsBynary();
+            encodedMessageWithOneFail.PrintAsBinary();
             Console.WriteLine("\nСообщение с двумя ошибками:");
-            encodedMessageWithTwoFails.PrintAsBynary();
+            encodedMessageWithTwoFails.PrintAsBinary();
 
             encodedMessage.FindFailsAndFix(polynom, matrix.Instance, r);
             encodedMessageWithOneFail.FindFailsAndFix(polynom, matrix.Instance, r);

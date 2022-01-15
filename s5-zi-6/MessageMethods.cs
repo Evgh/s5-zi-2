@@ -127,7 +127,7 @@ namespace s5_zi_5
             {
                 messageBinareWithFail[rowWithFail] = !messageBinareWithFail[rowWithFail];
                 Console.WriteLine("Сообщение с исправленной ошибкой:");
-                messageBinareWithFail.PrintAsBynary();
+                messageBinareWithFail.PrintAsBinary();
             }
             else
             {
