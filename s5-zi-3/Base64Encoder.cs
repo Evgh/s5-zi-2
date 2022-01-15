@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
+using CummonLogic;
 
 namespace s5_zi_3
 {
@@ -17,15 +14,9 @@ namespace s5_zi_3
         public static string Encode(string info)
         {
             var bytes = Encoding.ASCII.GetBytes(info);
-            var bits = s5_zi_2.Encoder.GetBitsFromBytes(bytes);
+            var bits = BynaryEncoder.GetBitsFromBytes(bytes);
             var baseIndexes = GetBase64Indexes(bits);
             var message = GetString(baseIndexes);
-
-            #region Debug output
-            //Console.WriteLine(bits.Length);
-            //Console.WriteLine(messageLenth);
-            //Console.WriteLine(message);
-            #endregion
 
             return message;
         }
@@ -46,18 +37,26 @@ namespace s5_zi_3
 
         public static string GetString(byte[] bytes)
         {
-            var messageLenth = bytes.Length % 4 == 0 ? bytes.Length : ((bytes.Length % 4 == 2) ? bytes.Length + 2 : bytes.Length + 1);
+            var messageLenth = ConvertBase64LengthToNormal(bytes.Length);
             char[] message = new char[messageLenth];
 
             for (int i = 0; i < messageLenth; i++)
-                message[i] = !(i < bytes.Length) ? _fillSymbol : !(bytes[i] < _base64alphabet.Length) ? _fillSymbol : _base64alphabet[bytes[i]];
+            {
+                if (i >= bytes.Length)
+                    message[i] = _fillSymbol;
+
+                else if (bytes[i] >= _base64alphabet.Length)
+                    message[i] = _fillSymbol;
+
+                else
+                    message[i] = _base64alphabet[bytes[i]];
+            }
             return new string(message);
         }
 
-
-        static byte[] GetBase64Indexes(bool[] bits)
+        private static byte[] GetBase64Indexes(bool[] bits)
         {
-            var indAmount = bits.Length % 24 == 0 ? bits.Length / 6 : bits.Length / 6 + 1;
+            var indAmount = ConvertMessageLengthToBase64(bits.Length);
             var indexes = new byte[indAmount];
 
             for (int i = 0; i < indexes.Length; i++)
@@ -72,13 +71,22 @@ namespace s5_zi_3
                 }
                 indexes[i] = index;
             }
-            #region Debug output
-            //Console.WriteLine(indAmount);
-            //foreach (var i in indexes)
-            //    Console.Write(i + " ");
-            //Console.WriteLine();
-            #endregion
+
             return indexes;
+        }
+
+        private static int ConvertBase64LengthToNormal(int base64length)
+        {
+            return base64length % 4 == 0 ?
+                        base64length :
+                        ((base64length % 4 == 2) ?
+                                base64length + 2 :
+                                base64length + 1);
+        }
+
+        private static int ConvertMessageLengthToBase64(int messageLength)
+        {
+            return messageLength % 24 == 0 ? messageLength / 6 : messageLength / 6 + 1;
         }
     }
 }

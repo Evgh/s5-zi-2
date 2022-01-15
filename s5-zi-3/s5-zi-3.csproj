@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CummonLogic\CummonLogic.csproj" />
     <ProjectReference Include="..\s5-zi-2\s5-zi-2.csproj" />
   </ItemGroup>
   

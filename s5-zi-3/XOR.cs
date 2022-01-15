@@ -1,14 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace s5_zi_3
 {
     public static class XOR
     {
-        public static string ExecuteXor(string first, string second, Func<string, byte[]> getBytes = null, Func<byte[], string> getString = null)
+        public static string ExecuteXorAscii(string value, string key)
+        {
+            return ExecuteXor(value, key, ASCIIEncoding.ASCII.GetBytes, ASCIIEncoding.ASCII.GetString);
+        }
+
+        public static string ExecuteXorBase64(string value, string key)
+        {
+            return ExecuteXor(value, key, Base64Encoder.GetBase64Bytes, Base64Encoder.GetString);
+        }
+
+        public static string ExecuteXor(string value, string key, Func<string, byte[]> getBytes = null, Func<byte[], string> getString = null)
         {
             if (getBytes == null || getString == null)
             {
@@ -16,61 +23,46 @@ namespace s5_zi_3
                 getString = ASCIIEncoding.ASCII.GetString;
             }
 
-            var fixLength = FixLength(first, second);
-            first = fixLength.Item1;
-            second = fixLength.Item2;
+            Tuple<string, string> lengthFixed = FixLength(value, key);
+            value = lengthFixed.Item1;
+            key = lengthFixed.Item2;
 
-            var firstAscii = getBytes(first);
-            var secondAscii = getBytes(second);
+            var valueBytes = getBytes?.Invoke(value);
+            var keyBytes = getBytes?.Invoke(key);
 
-            var xor = ExecuteXor(firstAscii, secondAscii);
+            var xor = ExecuteXor(valueBytes, keyBytes);
 
-            return getString(xor);
+            return getString?.Invoke(xor);
         }
 
-        public static byte[] ExecuteXor(byte[] firstBytes, byte[] secondBytes)
+        public static byte[] ExecuteXor(byte[] valueBytes, byte[] keyBytes)
         {
-            var xor = new byte[firstBytes.Length];
-            for (int i = 0; i < firstBytes.Length; i++)
-                xor[i] = (byte)(firstBytes[i] ^ secondBytes[i]);
+            var xor = new byte[valueBytes.Length];
 
-            #region Debug output 
-            //foreach (var b in xor)
-            //    Console.Write(b ? 1 : 0);
-            //Console.WriteLine();
-            #endregion
+            for (int i = 0; i < valueBytes.Length; i++)
+                xor[i] = (byte)(valueBytes[i] ^ keyBytes[i]);
+
             return xor;
         }
 
-        public static string ExecuteXorAscii(string first, string second)
+        private static Tuple<string, string> FixLength(string value, string key)
         {
-            return ExecuteXor(first, second, ASCIIEncoding.ASCII.GetBytes, ASCIIEncoding.ASCII.GetString);
-        }
+            if (string.IsNullOrEmpty(value))
+                value = "";
+            if(string.IsNullOrEmpty(key))
+                key = "";
 
-        public static string ExecuteXorBase64(string first, string second)
-        {
-            return ExecuteXor(first, second, Base64Encoder.GetBase64Bytes, Base64Encoder.GetString);
-        }
-
-
-        private static Tuple<string, string> FixLength(string first, string second)
-        {
-            if (string.IsNullOrEmpty(first))
-                first = "";
-            if(string.IsNullOrEmpty(second))
-                second = "";
-
-            while (first.Length < second.Length)
+            while (value.Length < key.Length)
             {
-                first += '0';
+                value += '0';
             }
 
-            while (second.Length < first.Length)
+            while (key.Length < value.Length)
             {
-                second += '0';
+                key += '0';
             }
 
-            return new Tuple<string, string>(first, second);
+            return new Tuple<string, string>(value, key);
         }
     }
 }
