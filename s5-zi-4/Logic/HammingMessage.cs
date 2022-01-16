@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CommonLogic;
 
-namespace s5_zi_4
+namespace s5_zi_4.Logic
 {
     public class HammingMessage
     {

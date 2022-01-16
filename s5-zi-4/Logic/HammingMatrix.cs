@@ -2,10 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace s5_zi_4
+namespace s5_zi_4.Logic
 {
     public class HammingMatrix
     {
