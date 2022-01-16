@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace s5_zi_2
+namespace s5_zi_2.Logic
 {
     public class AlphabetInformationPrinter
     {

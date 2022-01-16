@@ -1,4 +1,4 @@
-﻿namespace s5_zi_2
+﻿namespace s5_zi_2.Models
 {
     class SuperSymbol
     {

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using CommonLogic;
 using s5_zi_2.Exceptions;
+using s5_zi_2.Models;
 
-namespace s5_zi_2
+namespace s5_zi_2.Logic
 {
     public class Alphabet
     {
