@@ -1,5 +1,5 @@
 # s5-zi-all
-These are solutions for assignments for the university course "Information Security". I implemented some encoding and compression algorithms by myself.
+These are solutions for assignments for the university course "Information Security". I implemented some encoding and compression algorithms by myself. You can find theory and full task descriptions in file Urbanovich_Kodirovanie_informacii.pdf
 
 
 № | Repozitory | Description | 
@@ -13,4 +13,3 @@ These are solutions for assignments for the university course "Information Secur
 09| s5-zi-9 | Shannon-Fano and Huffman coding for data compression and decompression|
 10| s5-zi-10 | Lempel-Ziv algorithm for data compression and decompression |
 11| s5-zi-11 | Arithmetic methods for data compression and decompression |
-
