@@ -28,6 +28,7 @@ namespace s5_zi_3
             AlphabetRoutine($"{Base64Encoder.Base64Alphabet}{Base64Encoder.FillSymbol}",
                             Base64Encoder.Encode(info));
 
+            Console.WriteLine($"Value = {_value}, key = {_key}");
             XorAsciiRoutine();
             XorBase64Routine();
         }
@@ -50,9 +51,9 @@ namespace s5_zi_3
             string singleAsciiXorResult = XOR.ExecuteXorAscii(_value, _key);
             string doubleAsciiXorResult = XOR.ExecuteXorAscii(singleAsciiXorResult, _key);
 
-            Console.WriteLine($"Original value: {_value} \nAscii Xor Results:\n");
-            Console.WriteLine(singleAsciiXorResult);
-            Console.WriteLine(doubleAsciiXorResult);
+            Console.WriteLine($"Original value: {_value} \nAscii Xor Results:");
+            Console.WriteLine($"Single XOR: {singleAsciiXorResult}");
+            Console.WriteLine($"Double XOR: {doubleAsciiXorResult}");
             Console.WriteLine();
         }
 
@@ -63,9 +64,9 @@ namespace s5_zi_3
             string singleBase64Xor = XOR.ExecuteXorBase64(base64Value, base64Key);
             string doubleBase64Xor = XOR.ExecuteXorBase64(singleBase64Xor, base64Key);
 
-            Console.WriteLine($"Value encoded in Base64: {base64Value} \nXor Results:\n");
-            Console.WriteLine(singleBase64Xor);
-            Console.WriteLine(doubleBase64Xor);
+            Console.WriteLine($"Value encoded in Base64: {base64Value} \nXor Results:");
+            Console.WriteLine($"Single XOR: {singleBase64Xor}");
+            Console.WriteLine($"Double XOR: { doubleBase64Xor}");
             Console.WriteLine();
         }
     }
