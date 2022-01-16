@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace s5_zi_3
+namespace s5_zi_3.Logic
 {
     public static class XOR
     {

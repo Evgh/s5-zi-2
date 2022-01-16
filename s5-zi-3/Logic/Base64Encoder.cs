@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using CommonLogic;
 
-namespace s5_zi_3
+namespace s5_zi_3.Logic
 {
     public static class Base64Encoder
     {

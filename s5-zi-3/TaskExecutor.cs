@@ -1,23 +1,24 @@
 ﻿using System;
 using CommonLogic;
-using s5_zi_2;
+using s5_zi_2.Logic;
+using s5_zi_3.Logic;
 
 namespace s5_zi_3
 {
-    public class WorkExecutor
+    public class TaskExecutor
     {
         private readonly string _sourcePath;
         private readonly string _value;
         private readonly string _key;
 
-        public WorkExecutor(string sourcePath, string value, string key)
+        public TaskExecutor(string sourcePath, string value, string key)
         {
             _sourcePath = sourcePath;
             _value = value;
             _key = key;
         }
 
-        public void ExecuteRoutine()
+        public void Execute()
         {
             Console.WriteLine("Lab №3");
 

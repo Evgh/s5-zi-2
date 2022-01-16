@@ -6,6 +6,11 @@ namespace s5_zi_2
     {
         static void Main(string[] args)
         {
+            Lab2Routine();
+        }
+        
+        private static void Lab2Routine()
+        {
             TaskExecutor.Execute("abcdefghijklmnopqrstuvwxyz",
                                  @"textfiles/english.txt",
                                  "KasperovichEugeniyaNikolaevna"
@@ -16,10 +21,10 @@ namespace s5_zi_2
                                  "КасперовичЕвгенияНиколаевна"
                                 );
 
-            TaskExecutor.Execute("01", 
-                                 @"textfiles/binary.txt", 
+            TaskExecutor.Execute("01",
+                                 @"textfiles/binary.txt",
                                  "11001010 11000101"
                                 );
-        }        
+        }
     }
 }

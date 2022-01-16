@@ -9,8 +9,8 @@
 
         private static void Lab3Routine()
         {
-            WorkExecutor lab3Executor = new(@"textfiles/english.txt", "Kasperovich", "Eugeniya");
-            lab3Executor.ExecuteRoutine();
+            TaskExecutor lab3Executor = new(@"textfiles/english.txt", "Kasperovich", "Eugeniya");
+            lab3Executor.Execute();
         }     
     }
 }
