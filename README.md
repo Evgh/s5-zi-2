@@ -1,6 +1,7 @@
 # s5-zi-all
 These are solutions for assignments for the university course "Information Security". I implemented some encoding and compression algorithms by myself. You can find theory and full task descriptions in file Urbanovich_Kodirovanie_informacii.pdf
 
+### Please note that  projects s5-zi-2, s5-zi-3, s5-zi-4 have been implemented in compliance with code conventions, but refactoring for the others has not yet been carried out. 
 
 № | Repozitory | Description | 
 :-|:--------:|:-----------:|
