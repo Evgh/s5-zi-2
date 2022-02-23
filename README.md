@@ -3,7 +3,7 @@ These are solutions for assignments for the university course "Information Secur
 
 _**Please note that  projects s5-zi-2, s5-zi-3, s5-zi-4 have been implemented in compliance with code conventions, but refactoring for the others has not yet been carried out.**_
 
-№ | Repozitory | Description | 
+№ | Project | Description | 
 :-|:--------:|:-----------:|
 02| s5-zi-2 | Data entropy |
 03| s5-zi-3 | Base64 algorithm, XOR | 
